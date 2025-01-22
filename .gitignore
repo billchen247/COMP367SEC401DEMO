@@ -8,7 +8,7 @@ __pycache__/
 password
 token
 credentials
-
+passwd
 
 # Distribution / packaging
 .Python
