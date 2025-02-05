@@ -4,7 +4,7 @@ pipeline {
     environment {
         GIT_REPO = 'https://github.com/billchen247/spring-petclinic.git'  // Replace with your repo
         GIT_BRANCH = 'main'  // Change to the branch you want
-        MAVEN_HOME = 'Maven'  // Ensure Maven is configured in Jenkins
+        MAVEN_HOME = tool 'Maven'  // Ensure Maven is configured in Jenkins
         SONAR_URL = 'http://your-sonarqube-server'  // Update with your SonarQube server URL
     }
 
