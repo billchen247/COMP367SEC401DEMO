@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = 'https://github.com/billchen247/spring-petclinic.git'  // Replace with your repo
+        GIT_BRANCH = 'main'  // Change to the branch you want
+        MAVEN_HOME = 'Maven'  // Ensure Maven is configured in Jenkins
+        SONAR_URL = 'http://your-sonarqube-server'  // Update with your SonarQube server URL
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh "${MAVEN_HOME}/bin/mvn clean package"
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                sh "${MAVEN_HOME}/bin/mvn test"
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'  // Archive test results
+                }
+            }
+        }
+
+        stage('Code Analysis with SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') {  // "SonarQube" should match Jenkins' SonarQube configuration name
+                    sh "${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=my_project"
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Build, tests, and code scan completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed. Check logs for errors."
+        }
+    }
+}
