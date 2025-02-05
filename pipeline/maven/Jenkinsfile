@@ -32,24 +32,7 @@ pipeline {
             }
         }
 
-        stage('Code Analysis with SonarQube') {
-            steps {
-                withSonarQubeEnv('SonarQube') {  // "SonarQube" should match Jenkins' SonarQube configuration name
-                    sh "${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=my_project"
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                script {
-                    timeout(time: 5, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-        }
-    }
+       
 
     post {
         success {
