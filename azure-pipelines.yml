@@ -5,6 +5,9 @@
 
 trigger:
 - main
+- bill_test
+- demo
+
 
 pool:
   vmImage: ubuntu-latest
@@ -13,10 +16,19 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: echo my freedom step
-  displayName: 'Run free step'
-
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+  
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
