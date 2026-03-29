@@ -1,0 +1,8 @@
+Muhammad Bilal Khan 301326791
+
+PR (pull request) to add name to list of students.
+
+File: bilalkhan.txt
+Dated: Jan 22 2025, 12:14 PM
+Class: COMP367 DevOps Implementation SEC.401
+W25
